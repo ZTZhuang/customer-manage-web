@@ -11,7 +11,7 @@
     <div class="right-menu">
       <el-dropdown class="info-container" trigger="click">
         <div class="info-wrapper">
-          <div>{{ username }}</div>
+          <div>{{ userInfo.username }}</div>
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -35,7 +35,7 @@ export default {
     Hamburger
   },
   computed: {
-    ...mapGetters(["sidebar", "username"])
+    ...mapGetters(["sidebar", "userInfo"])
   },
   methods: {
     toggleSideBar() {

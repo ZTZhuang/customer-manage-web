@@ -1,11 +1,12 @@
 import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import { resetRouter } from '@/router'
+import { resetRouter, dynamicRoutes } from '@/router'
 
 const getDefaultState = () => {
   return {
     token: getToken(),
-    username: '',
+    userInfo: {},
+    routes: []
   }
 }
 
@@ -18,8 +19,11 @@ const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
   },
-  SET_NAME: (state, username) => {
-    state.username = username
+  SET_USER_INFO: (state, userInfo) => {
+    state.userInfo = userInfo
+  },
+  SET_ROUTES: (state, routes) => {
+    state.routes = routes
   }
 }
 
@@ -32,8 +36,6 @@ const actions = {
         const { data } = response
         commit('SET_TOKEN', data.token)
         setToken(data.token)
-        console.log(state.token)
-        console.log(data.token)
         resolve()
       }).catch(error => {
         reject(error)
@@ -51,9 +53,7 @@ const actions = {
           return reject('Verification failed, please Login again.')
         }
 
-        const { username } = data
-
-        commit('SET_NAME', username)
+        commit('SET_USER_INFO', data)
         resolve(data)
       }).catch(error => {
         reject(error)
@@ -82,6 +82,14 @@ const actions = {
       commit('RESET_STATE')
       resolve()
     })
+  },
+
+  generateRoutes({ commit }, isAdmin) {
+    if (state.userInfo.isAdmin) {
+      commit('SET_ROUTES', dynamicRoutes)
+    } else {
+      commit('SET_ROUTES', dynamicRoutes.slice(0, 1))
+    }
   }
 }
 
