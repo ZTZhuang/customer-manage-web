@@ -45,7 +45,7 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/account/index',
+    redirect: '/customer/index',
   }
 ]
 
