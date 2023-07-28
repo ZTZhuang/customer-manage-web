@@ -3,6 +3,7 @@
     <el-button size="mini" type="primary" @click="handleAdd">新增</el-button>
     <el-table :data="tableData" style="width: 100%">
       <el-table-column prop="username" label="账号"> </el-table-column>
+      <el-table-column prop="customerCount" label="客户数"> </el-table-column>
       <el-table-column prop="createTime" label="创建时间"> </el-table-column>
       <el-table-column prop="updateTime" label="更新时间"> </el-table-column>
       <el-table-column prop="forbidden" label="状态">
@@ -23,6 +24,7 @@
           >
             {{ scope.row.forbidden ? '启用' : '停用' }}
           </el-button>
+          <el-button size="mini" type="primary" @click="handleShowCustomer(scope.row)">查看客户</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -39,6 +41,18 @@
         <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="confirm">确 定</el-button>
       </span>
+    </el-dialog>
+    <el-dialog title="查看客户" :visible.sync="dialogCustomerVisible" width="800px">
+      <el-table :data="customerList" style="width: 100%">
+        <el-table-column prop="name" label="客户名"> </el-table-column>
+        <el-table-column prop="phone" label="联系电话"> </el-table-column>
+        <el-table-column prop="email" label="邮箱"> </el-table-column>
+        <el-table-column prop="industry" label="行业"> </el-table-column>
+        <el-table-column prop="address" label="地址"> </el-table-column>
+        <el-table-column prop="remark" label="备注"> </el-table-column>
+        <el-table-column prop="createTime" label="创建时间"> </el-table-column>
+        <el-table-column prop="updateTime" label="更新时间"> </el-table-column>
+      </el-table>
     </el-dialog>
   </div>
 </template>
@@ -68,7 +82,9 @@ export default {
           { required: true, message: '请输入密码', trigger: 'blur' },
           { min: 6, max: 30, message: '长度在 6 到 30 个字符', trigger: 'blur' }
         ]
-      }
+      },
+      dialogCustomerVisible: false,
+      customerList: []
     };
   },
   mounted() {
@@ -155,6 +171,10 @@ export default {
           this.getList();
         });
       });
+    },
+    handleShowCustomer(row) {
+      this.dialogCustomerVisible = true;
+      this.customerList = row.customers;
     }
   }
 };
